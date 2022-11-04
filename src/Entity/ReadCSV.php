@@ -15,7 +15,7 @@ class ReadCSV
     private $title;
 
     /**
-     * @var bool|null
+     * @var string|null
      */
     private $is_enabled;
 
@@ -82,17 +82,17 @@ class ReadCSV
     }
 
     /**
-     * @return bool|null
+     * @return string|null
      */
-    public function getIsEnabled(): ?bool
+    public function getIsEnabled(): ?string
     {
         return $this->is_enabled;
     }
 
     /**
-     * @param bool|null $is_enabled
+     * @param string|null $is_enabled
      */
-    public function setIsEnabled(?bool $is_enabled): void
+    public function setIsEnabled(?string $is_enabled): void
     {
         $this->is_enabled = $is_enabled;
     }

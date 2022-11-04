@@ -51,7 +51,7 @@ class ReadCSVCommand extends Command
     private function csv_to_entity($source)
     {
         $array = [];
-        $readCsv = new ReadCSV();
+
         $context = [
             CsvEncoder::DELIMITER_KEY => ';',
             CsvEncoder::ENCLOSURE_KEY => '"',
@@ -65,15 +65,18 @@ class ReadCSVCommand extends Command
             $date = DateTime::createFromFormat('Y-m-d H:i:s', $result["created_at"]);
             $slug = explode(" ", str_replace(",", "", strtolower($result["title"])));
             $slug = implode("-", $slug);
+
+            $readCsv = new ReadCSV();
+
             $readCsv->setSku(intval($result["sku"]));
             $readCsv->setTitle($result["title"]);
-            $readCsv->setIsEnabled(intval($result["is_enabled"]));
-            $readCsv->setPrice(floatval($result["price"]));
+            $readCsv->setIsEnabled(intval($result["is_enabled"]) == 0 ? "Disable" : "Enable" );
+            $readCsv->setPrice(round(floatval($result["price"]), 1));
             $readCsv->setCurrency($result["currency"]);
-            $readCsv->setDescription($result["description"]);
+            $readCsv->setDescription(nl2br($result["description"]));
             $readCsv->setCreatedAt($date->format("l, d-M-Y G:i:s T"));
             $readCsv->setSlug($slug);
-            $price_curr = $readCsv->getPrice()."".$readCsv->getCurrency();
+            $price_curr = str_replace(".", ",", $readCsv->getPrice())."".$readCsv->getCurrency();
             $readCsv->setPriceCurr($price_curr);
             $array[] = $readCsv;
         }
@@ -95,13 +98,30 @@ class ReadCSVCommand extends Command
         $table = new CliTable;
 
         $res = $this->convertToArray($data);
-        dd($res);
+
+        $table->setChars(array(
+            'top'          => '-',
+            'top-mid'      => '+',
+            'top-left'     => '+',
+            'top-right'    => '+',
+            'bottom'       => '-',
+            'bottom-mid'   => '+',
+            'bottom-left'  => '+',
+            'bottom-right' => '+',
+            'left'         => '|',
+            'left-mid'     => '+',
+            'mid'          => '-',
+            'mid-mid'      => '+',
+            'right'        => '|',
+            'right-mid'    => '+',
+            'middle'       => '| ',
+        ));
 
         $table->addField('Sku', 'sku', false);
         $table->addField('Status', 'isEnabled', false);
-        $table->addField('Price', 'price_curr', false);
+        $table->addField('Price', 'priceCurr', false);
         $table->addField('Description', 'description', false);
-        $table->addField('Created At', 'created_at', false);
+        $table->addField('Created At', 'createdAt', false);
         $table->addField('Slug', 'slug', false);
         $table->injectData($res);
         $table->display();
