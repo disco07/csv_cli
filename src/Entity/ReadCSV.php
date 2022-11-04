@@ -40,6 +40,11 @@ class ReadCSV
     private $created_at;
 
     /**
+     * @var string|null
+     */
+    private $slug;
+
+    /**
      * @return int|null
      */
     public function getSku(): ?int
@@ -149,5 +154,21 @@ class ReadCSV
     public function setCreatedAt(?\DateTime $created_at): void
     {
         $this->created_at = $created_at;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string|null $slug
+     */
+    public function setSlug(?string $slug): void
+    {
+        $this->slug = $slug;
     }
 }
