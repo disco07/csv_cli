@@ -35,7 +35,7 @@ class ReadCSV
     private $description;
 
     /**
-     * @var \DateTime|null
+     * @var string|null
      */
     private $created_at;
 
@@ -43,6 +43,11 @@ class ReadCSV
      * @var string|null
      */
     private $slug;
+
+    /**
+     * @var string|null
+     */
+    private $price_curr;
 
     /**
      * @return int|null
@@ -141,17 +146,17 @@ class ReadCSV
     }
 
     /**
-     * @return \DateTime|null
+     * @return string|null
      */
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?string
     {
         return $this->created_at;
     }
 
     /**
-     * @param \DateTime|null $created_at
+     * @param string|null $created_at
      */
-    public function setCreatedAt(?\DateTime $created_at): void
+    public function setCreatedAt(?string $created_at): void
     {
         $this->created_at = $created_at;
     }
@@ -170,5 +175,21 @@ class ReadCSV
     public function setSlug(?string $slug): void
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPriceCurr(): ?string
+    {
+        return $this->price_curr;
+    }
+
+    /**
+     * @param string|null $price_curr
+     */
+    public function setPriceCurr(?string $price_curr): void
+    {
+        $this->price_curr = $price_curr;
     }
 }
