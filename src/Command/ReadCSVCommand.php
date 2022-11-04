@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\ReadCSV;
 use DateTime;
 use jc21\CliTable;
+use jc21\CliTableManipulator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -73,10 +74,11 @@ class ReadCSVCommand extends Command
             $readCsv->setIsEnabled(intval($result["is_enabled"]) == 0 ? "Disable" : "Enable" );
             $readCsv->setPrice(round(floatval($result["price"]), 1));
             $readCsv->setCurrency($result["currency"]);
-            $readCsv->setDescription(nl2br($result["description"]));
+//            echo str_replace("<br/>", "\n", $result["description"]);
+            $readCsv->setDescription($result["description"]);
             $readCsv->setCreatedAt($date->format("l, d-M-Y G:i:s T"));
             $readCsv->setSlug($slug);
-            $price_curr = str_replace(".", ",", $readCsv->getPrice())."".$readCsv->getCurrency();
+            $price_curr = number_format($readCsv->getPrice(), 2, ',', ' ')."".$readCsv->getCurrency();
             $readCsv->setPriceCurr($price_curr);
             $array[] = $readCsv;
         }
