@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,12 +34,18 @@ class ReadCSVCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $context = [
+            CsvEncoder::DELIMITER_KEY => ';',
+            CsvEncoder::ENCLOSURE_KEY => '"',
+            CsvEncoder::ESCAPE_CHAR_KEY => '\\',
+            CsvEncoder::KEY_SEPARATOR_KEY => ',',
+        ];
+
         $source = $input->getOption("source");
         $json_check = $input->getOption("json");
 
         $decoder = new Serializer([new ObjectNormalizer()], [new CsvEncoder()]);
-        $data = $decoder->decode(file_get_contents($source), 'csv');
-
+        $data = $decoder->decode(file_get_contents($source), 'csv', $context);
         dd($data);
     }
 }
