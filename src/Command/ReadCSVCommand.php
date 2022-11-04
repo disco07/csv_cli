@@ -44,8 +44,13 @@ class ReadCSVCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $source = $input->getOption("source");
-        $json_check = $input->getOption("json");
+        $json_check = $input->getOption("json") == "true";
         $data = $this->csv_to_entity($source);
+        if ($json_check) {
+            $res = $this->convertToArray($data);
+            echo json_encode($res);
+            return;
+        }
         $this->display($data);
     }
 
