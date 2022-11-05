@@ -5,7 +5,6 @@ namespace App\Command;
 use App\Entity\ReadCSV;
 use DateTime;
 use jc21\CliTable;
-use jc21\CliTableManipulator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -54,7 +53,7 @@ class ReadCSVCommand extends Command
         $this->display($data);
     }
 
-    private function csv_to_entity($source)
+    private function csv_to_entity($source): array
     {
         $array = [];
 
@@ -83,7 +82,7 @@ class ReadCSVCommand extends Command
 //            echo str_replace("<br/>", "\n", $result["description"]);
             $readCsv->setCreatedAt($date->format("l, d-M-Y G:i:s T"));
             $readCsv->setSlug($slug);
-            $price_curr = number_format($readCsv->getPrice(), 2, ',', ' ')."".$readCsv->getCurrency();
+            $price_curr = number_format($readCsv->getPrice(), 2, ',', ' ') .$readCsv->getCurrency();
             $readCsv->setPriceCurr($price_curr);
 
             if (str_contains($result["description"], "<br/>")) {
@@ -92,7 +91,7 @@ class ReadCSVCommand extends Command
 
                 $readCsv->setDescription($desc);
                 $readCsv2->setDescription($desc2);
-            } elseif(str_contains($result["description"], "\\r")) {;
+            } elseif(str_contains($result["description"], "\\r")) {
                 $desc = explode("\\r", $result["description"])[0];
                 $desc2 = explode("\\r", $result["description"])[1];
 
@@ -141,12 +140,12 @@ class ReadCSVCommand extends Command
             'middle'       => '| ',
         ));
 
-        $table->addField('Sku', 'sku', false);
-        $table->addField('Status', 'isEnabled', false);
-        $table->addField('Price', 'priceCurr', false);
-        $table->addField('Description', 'description', false);
-        $table->addField('Created At', 'createdAt', false);
-        $table->addField('Slug', 'slug', false);
+        $table->addField('Sku', 'sku');
+        $table->addField('Status', 'isEnabled');
+        $table->addField('Price', 'priceCurr');
+        $table->addField('Description', 'description');
+        $table->addField('Created At', 'createdAt');
+        $table->addField('Slug', 'slug');
         $table->injectData($res);
         $table->display();
     }
