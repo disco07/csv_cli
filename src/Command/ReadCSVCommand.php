@@ -73,6 +73,7 @@ class ReadCSVCommand extends Command
             $slug = implode("-", $slug);
 
             $readCsv = new ReadCSV();
+            $readCsv2 = new ReadCSV();
 
             $readCsv->setSku(intval($result["sku"]));
             $readCsv->setTitle($result["title"]);
@@ -80,12 +81,28 @@ class ReadCSVCommand extends Command
             $readCsv->setPrice(round(floatval($result["price"]), 1));
             $readCsv->setCurrency($result["currency"]);
 //            echo str_replace("<br/>", "\n", $result["description"]);
-            $readCsv->setDescription($result["description"]);
             $readCsv->setCreatedAt($date->format("l, d-M-Y G:i:s T"));
             $readCsv->setSlug($slug);
             $price_curr = number_format($readCsv->getPrice(), 2, ',', ' ')."".$readCsv->getCurrency();
             $readCsv->setPriceCurr($price_curr);
+
+            if (str_contains($result["description"], "<br/>")) {
+                $desc = explode("<br/>", $result["description"])[0];
+                $desc2 = explode("<br/>", $result["description"])[1];
+
+                $readCsv->setDescription($desc);
+                $readCsv2->setDescription($desc2);
+            } elseif(str_contains($result["description"], "\\r")) {;
+                $desc = explode("\\r", $result["description"])[0];
+                $desc2 = explode("\\r", $result["description"])[1];
+
+                $readCsv->setDescription($desc);
+                $readCsv2->setDescription($desc2);
+            } else {
+                $readCsv->setDescription($result["description"]);
+            }
             $array[] = $readCsv;
+            $array[] = $readCsv2;
         }
 
         return $array;
