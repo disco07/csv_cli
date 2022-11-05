@@ -79,7 +79,6 @@ class ReadCSVCommand extends Command
             $readCsv->setIsEnabled(intval($result["is_enabled"]) == 0 ? "Disable" : "Enable" );
             $readCsv->setPrice(round(floatval($result["price"]), 1));
             $readCsv->setCurrency($result["currency"]);
-//            echo str_replace("<br/>", "\n", $result["description"]);
             $readCsv->setCreatedAt($date->format("l, d-M-Y G:i:s T"));
             $readCsv->setSlug($slug);
             $price_curr = number_format($readCsv->getPrice(), 2, ',', ' ') .$readCsv->getCurrency();
